@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAPI Trading Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>SmartAPI Trading Login</h2>
+
+    <label for="client_code">Client Code:</label>
+    <input type="text" id="client_code" placeholder="Enter Client Code" required>
+
+    <label for="api_key">API Key:</label>
+    <input type="text" id="api_key" placeholder="Enter API Key" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter Password" required>
+
+    <label for="totp">TOTP:</label>
+    <input type="text" id="totp" placeholder="Enter TOTP" required>
+
+    <button id="loginButton">Login</button>
+
+    <div class="output" id="output"></div>
+</div>
+
+<script>
+document.getElementById('loginButton').addEventListener('click', function() {
+    const clientCode = document.getElementById('client_code').value;
+    const apiKey = document.getElementById('api_key').value;
+    const password = document.getElementById('password').value;
+    const totp = document.getElementById('totp').value;
+
+    if (clientCode && apiKey && password && totp) {
+        fetch('login.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ clientCode, apiKey, password, totp })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('output').innerText = data.message;
+        })
+        .catch(error => {
+            document.getElementById('output').innerText = `Error: ${error.message}`;
+        });
+    } else {
+        document.getElementById('output').innerText = 'Please fill in all fields.';
+    }
+});
+</script>
+
+</body>
+</html>
